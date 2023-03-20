@@ -1,0 +1,96 @@
+﻿<mah:MetroWindow x:Class="WindowTracker.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="clr-namespace:WindowTracker" 
+		xmlns:viewmodel="clr-namespace:WindowTracker.MVVM.ViewModel"
+		mc:Ignorable="d"
+		Title="MainWindow" Height="450" Width="800">
+
+    <Window.DataContext>
+		<viewmodel:MainViewModel/>
+	</Window.DataContext>
+	
+	<Grid Margin="2">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="70*"/>
+			<ColumnDefinition Width="602*"/>
+			<ColumnDefinition Width="70*"/>
+			<ColumnDefinition Width="70*"/>
+
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="70*" MaxHeight="70"/>
+			<RowDefinition Height="383*"/>
+		</Grid.RowDefinitions>
+		<Menu x:Name="Menu" Margin="1" >
+			<MenuItem BorderBrush="White" BorderThickness="2" FontSize="30" Width="{Binding ActualWidth, ElementName=Menu}" Height="{Binding ActualHeight, ElementName=Menu}">
+				<MenuItem.Header >
+					<TextBlock TextAlignment="Center" 
+								Margin="-7,5,0,0" 
+								Text="="                    
+								Width="{Binding ActualWidth, ElementName=Menu}"/>
+				</MenuItem.Header>
+
+				<MenuItem Command = "{Binding ChangeListCommand}" Background="#252525" Header="Live" Visibility="{Binding DisplayLive, UpdateSourceTrigger=PropertyChanged}" />
+                <MenuItem Command = "{Binding ChangeListCommand}" Background="#252525" Header="Status Changes" Visibility="{Binding DisplayLog, UpdateSourceTrigger=PropertyChanged}"/>
+			</MenuItem>
+		</Menu>
+    
+		<TextBox FontSize="30" 
+				 VerticalContentAlignment="Center" 
+				 Grid.Column="1" 
+				 Margin="2,2,2,2" 
+				 Text="{Binding Name}"
+                 Name="txtSearchBox"
+                 IsReadOnly="{Binding IsConnected, UpdateSourceTrigger=PropertyChanged}"/>
+                 
+
+        <TextBlock Grid.Column="1" 
+                   Margin="5,2" 
+                   MinWidth="50" 
+                   Text="Enter name" 
+                   FontSize="40"
+                   Foreground="Gray" 
+                   Visibility="{Binding ElementName=txtSearchBox, Path=Text.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                   IsHitTestVisible="False"/>
+
+        <Button Grid.Row="0" 
+				Grid.Column="2" 
+				Grid.ColumnSpan="2" 
+				FontSize="20"
+				Content="{Binding ConnectionButtonContent, UpdateSourceTrigger=PropertyChanged}" 
+				Margin="2,2,2,2"
+				Command="{Binding ConnectToServerCommand}"
+                Name="ConnectButton"
+                />
+		<ListView Visibility="{Binding DisplayLog, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.ColumnSpan="4" ItemsSource="{Binding Users}" >
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Grid Margin="0,2" Background="#4b4b4b" HorizontalAlignment="Stretch">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+							<ColumnDefinition/>
+						</Grid.ColumnDefinitions>
+						<Label BorderBrush="Gray" BorderThickness="5,0,0,0" Grid.Column="0" FontSize="20" Content="{Binding Name}" ContentStringFormat="Name: {0}"/>
+						<Label Grid.Column="1" FontSize="20" Content="{Binding WindowInFocus, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="Window in focus: {0}"/>
+						<Label HorizontalContentAlignment="Right"  Grid.Column="2" FontSize="20" Content="{Binding LastMessageReceived, UpdateSourceTrigger=PropertyChanged}" ContentStringFormat="Last updated: {0}"/>
+
+					</Grid>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+        <ListView	FontSize="20"
+					ItemsSource="{Binding Messages}" 
+					Visibility="{Binding DisplayLive, UpdateSourceTrigger=PropertyChanged}" 
+					Grid.Row="1" 
+					Grid.ColumnSpan="4"/>
+
+
+
+
+    </Grid>
+</mah:MetroWindow>
