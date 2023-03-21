@@ -57,7 +57,8 @@ namespace WindowTracker.MVVM.ViewModel
             }
         }
         private string _displayLog = "Visible";
-        public string DisplayLog {
+        public string DisplayLog
+        {
             get => _displayLog;
             set
             {

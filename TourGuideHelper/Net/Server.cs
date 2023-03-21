@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using WindowTracker.Net.IO;
@@ -21,12 +16,12 @@ namespace WindowTracker.Net
         public event Action userDisconnectedEvent;
         public Server() 
         {
-            client= new TcpClient();
+            client = new TcpClient();
         }
 
         public void ConnectToServer(string Name)
         {
-            if(!client.Connected) 
+            if (!client.Connected)
             {
 
                 if(!string.IsNullOrEmpty(Name))
